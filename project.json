@@ -1,0 +1,72 @@
+#===================================================================================#
+#_______________________----------- Lumen Summary -----------_______________________#
+#===================================================================================#
+auth.sh {
+	"type": bash script;
+	"goal": provide a GUI for authentication;
+	"dependencies": Zenity (https://gitlab.gnome.org/GNOME/zenity); 	
+	"details": works by taking the user input and matching it with the database.
+},
+
+setup.sh {
+	"type": bash script;
+	"goal": automatically install Lumen on a fresh system;
+	"dependencies": N/A;
+	"details": works by creating the directory, files and setting access control.
+},
+
+users.csv {
+	"type": Comma-Separated Values;
+	"goal": store users value;
+	"dependencies": csview (https://github.com/wfxr/csview);
+	"details": works by providing the database for auth.sh to lookup.
+},
+
+users(date).csv {
+	"type": Comma-Separated Values;
+	"goal": store authenticated users;
+	"dependencies": csview (https://github.com/wfxr/csview);
+	"details": works by taking the valid output of auth.sh and storing on itself with the timestamp.
+},
+
+/srv/lumen {
+	"type": directory;
+	"goal": be a unified place of the tool;
+	"dependencies": N/A;
+	"details": works by storing everything in one place to keep it all tidy up.	
+},
+
+/srv/lumen/db {
+	"type": directory;
+	"goal": keep the database safe;
+	"dependencies" N/A;
+	"details": works by storing the users.csv and keeping it locked away from non-superusers.
+},
+
+/srv/lumen/backups {
+	"type": directory;
+	"goal": keep the authenticated users safe;
+	"dependencies": N/A;
+	"details": works by keeping a copy of everyday auth safe and locked away from non-superusers.	
+},
+
+Lumen {
+	"type": user;
+	"goal": security lock for the tool;
+	"dependencies": N/A;
+	"details": be the dedicated user and owner of the tool, with no way to login.
+},
+
+lumain {
+	"type": group;
+	"goal": same as the user Lumen;
+	"dependencies": N/A;
+	"details": be the dedicated group of the user Lumen.
+},
+
+lumuser {
+	"type": group;
+	"goal": provide access to the auth;
+	"dependencies": N/A;
+	"details": works by allowing user(s) only from this group to authenticate.
+}
