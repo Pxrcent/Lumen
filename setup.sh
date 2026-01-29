@@ -73,13 +73,20 @@ printf "%b\n" "${GN}done${NC}"
 # printf "%b\n" "${GREEN}done${NC}"
 sleep 1
 ######################################################################################
-read -p "do you wish to add $USER to the lumuser group? Y/n > " PERM
+read -p "do you wish to add $USER to the LUMUSER group? Y/n > " PERM
 case "$PERM" in
-	n|N|no|No)
+	n|N|no|No|NO)
 	printf "%b\n" "${YW}skipping...${NC}" ;;
 	*)
 	sudo usermod -aG lumuser $USER && printf "%b\n" "${YW}added successfuly${NC}";;
 esac
+read -p "do you wish to add $USER to the LUMAIN group? y/N > " SPERM
+case "$SPERM" in
+	y|Y|yes|Yes|YES)
+	sudo usermod -aG lumuser $USER && printf "%b\n" "${YW}added successfuly${NC}";
+	*)
+	printf "%b\n" "${YW}skipping...${NC}" ;;
+esac	
 sleep 2
 ######################################################################################
 echo " "
