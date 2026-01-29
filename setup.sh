@@ -83,7 +83,7 @@ esac
 read -p "do you wish to add $USER to the LUMAIN group? y/N > " SPERM
 case "$SPERM" in
 	y|Y|yes|Yes|YES)
-	sudo usermod -aG lumuser $USER && printf "%b\n" "${YW}added successfuly${NC}";
+	sudo usermod -aG lumuser $USER && printf "%b\n" "${YW}added successfuly${NC}" ;;
 	*)
 	printf "%b\n" "${YW}skipping...${NC}" ;;
 esac	
