@@ -20,7 +20,13 @@ if
 	read -p "this will delete EVERYTHING about lumen, do you wish to proceed?(y/N) > " delete
 		case "$delete" in	
 			y|Y|yes|Yes|YES)
-			bash /srv/cleaning && exit 5 
+			sudo -v
+			 sudo rm -rf /srv/lumen && echo "directory removed"
+			 sudo userdel Lumen && echo "user and group deleted"
+			 sudo groupdel lumain 2> /dev/null
+			 sudo groupdel lumuser 2> /dev/null 
+			 echo "cleaning finished"
+			 exit 5 
 			;;
 			*)
 			printf "%b\n" "${PP}exiting!${NC}" && exit 1
@@ -68,8 +74,13 @@ sudo cp "project.json" "$MAINDIR"									# fix later
 sleep 2
 printf "%b\n" "${GN}done${NC}"
 ######################################################################################
-# sudo chmod 730 "$MAINDIR/db" && echo "setting permissions..."
-# sudo chmod 720 "$MAINDIR/db/users.csv"
+# sudo chmod 750 "$MAINDIR/auth.sh" && echo "setting permissions..."
+# sudo chmod 770 "$MAINDIR/setup.sh"
+# sudo chmod 770 "$MAINDIR/project.json"
+# sudo chown Lumen:lumuser "$MAINDIR/db"
+# sudo chmod 710 "$MAINDIR/db"
+# sudo chown Lumen:lumain "$MAINDIR/db/users.csv"
+# sudo chmod +w "$MAINDIR/db/users.csv"
 # printf "%b\n" "${GREEN}done${NC}"
 sleep 1
 ######################################################################################
