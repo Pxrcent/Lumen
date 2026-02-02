@@ -59,7 +59,7 @@ sudo useradd -g lumain -M -s /usr/bin/nologin Lumen && printf "%b\n" "${CN}creat
 printf "%b\n" "${GN}done${NC}"
 sleep 1
 ######################################################################################
-touch users.csv && sudo mv users.csv "$MAINDIR/db" && printf "%b\n"  "${CN}creating database...${NC}"
+touch users.csv && sudo mv users.csv "$MAINDIR/db" && printf "%b\n" "${CN}creating database...${NC}"
 sleep 1
 printf "%b\n" "${GN}done${NC}"
 ######################################################################################
@@ -69,33 +69,35 @@ sleep 1
 printf "%b\n" "${GN}done${NC}"
 ######################################################################################
 sudo cp "auth.sh" "$MAINDIR"										# fix later
-sudo cp "setup.sh" "$MAINDIR" && printf "%b\n" "${CN}copying files...${NC}" # fix later
+sudo cp "setup.sh" "$MAINDIR" && printf "%b\n" "${CN}moving files to lumen directory...${NC}" # fix later
 sudo cp "project.json" "$MAINDIR"									# fix later
 sleep 2
 printf "%b\n" "${GN}done${NC}"
 ######################################################################################
-# sudo chmod 750 "$MAINDIR/auth.sh" && echo "setting permissions..."
-# sudo chmod 770 "$MAINDIR/setup.sh"
-# sudo chmod 770 "$MAINDIR/project.json"
-# sudo chown Lumen:lumuser "$MAINDIR/db"
-# sudo chmod 710 "$MAINDIR/db"
-# sudo chown Lumen:lumain "$MAINDIR/db/users.csv"
-# sudo chmod +w "$MAINDIR/db/users.csv"
-# printf "%b\n" "${GREEN}done${NC}"
+ sudo chmod 750 "$MAINDIR/auth.sh" && echo "setting permissions..."	# r-x
+ sudo chmod 770 "$MAINDIR/setup.sh"									# r-w-x
+ sudo chmod 770 "$MAINDIR/project.json"								# r-w-x
+ sudo chmod 710 "$MAINDIR/db"											# x
+ sudo chmod +w "$MAINDIR/db/users.csv"									# w
+ sudo chmod 730 "$MAINDIR/backups"										# w-x
+ sudo chown Lumen:lumuser "$MAINDIR/db"								# user-able
+ sudo chown Lumen:lumain "$MAINDIR/db/users.csv"						# adm-owned
+ printf "%b\n" "${GREEN}done${NC}"
 sleep 1
 ######################################################################################
-read -p "do you wish to add $USER to the LUMUSER group? Y/n > " PERM
+read -p "do you wish to add $USER to the LUMUSER(user) group? Y/n > " PERM
 case "$PERM" in
 	n|N|no|No|NO)
 	printf "%b\n" "${YW}skipping...${NC}" ;;
 	*)
 	sudo usermod -aG lumuser $USER && printf "%b\n" "${YW}added successfuly${NC}";;
 esac
-read -p "do you wish to add $USER to the LUMAIN group? y/N > " SPERM
+read -p "do you wish to add $USER to the LUMAIN(admin) group? y/N > " SPERM
 case "$SPERM" in
 	y|Y|yes|Yes|YES)
 	sudo usermod -aG lumuser $USER && printf "%b\n" "${YW}added successfuly${NC}" ;;
 	*)
+	printf "%b\n" "${YW}NO ADMIN USER SET!!!${NC}"
 	printf "%b\n" "${YW}skipping...${NC}" ;;
 esac	
 sleep 2
