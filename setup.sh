@@ -95,7 +95,7 @@ esac
 read -p "do you wish to add $USER to the LUMAIN(admin) group? y/N > " SPERM
 case "$SPERM" in
 	y|Y|yes|Yes|YES)
-	sudo usermod -aG lumuser $USER && printf "%b\n" "${YW}added successfuly${NC}" ;;
+	sudo usermod -aG lumain $USER && printf "%b\n" "${YW}added successfuly${NC}" ;;
 	*)
 	printf "%b\n" "${YW}NO ADMIN USER SET!!!${NC}"
 	printf "%b\n" "${YW}skipping...${NC}" ;;
@@ -109,7 +109,7 @@ sudo chown Lumen:lumuser "$MAINDIR/db/users.csv"
 sleep 2
 printf "%b\n" "${GN}done${NC}"
 ######################################################################################
-read -p "setup finished! Type 'database' to manage users.  > " FLAVOUR # WIP
+read -p "setup finished! A reboot is recommended. Type 'database' to manage users.  > " FLAVOUR # WIP
 case $FLAVOUR in
 	database|--database|Database|DATABASE)
 	printf "%b\n" "${PP}work in progress, thank you for your time!${NC}"
