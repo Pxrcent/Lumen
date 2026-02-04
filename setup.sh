@@ -4,6 +4,7 @@ trap 'echo "❌ Error on line $LINENO: $BASH_COMMAND"' ERR
 MAINDIR=/srv/lumen
 TODAYS="users$(date +%F).csv"
 SETUPFLAG="$MAINDIR/.flag/done.txt"
+NAMES=$(cut -d',' -f2 "/srv/lumen/db/users.csv" | grep -v "Name")
 GN='\033[0;32m'							# green
 YW='\033[0;33m'							# yellow
 CN='\033[0;36m'							# cyan
@@ -16,28 +17,64 @@ if
 	--database)
 	printf "%b\n" "${PP}WIP${NC}" && exit 0
 	;;
+	--admin)
+		ZOUT=$(printf "%s\n" "$NAMES" \
+			  | zenity --list \
+			    --title="Lumen Admin" \
+			    --text="Select a user to edit" \
+			    --column="Name"	  2> /dev/null) 
+			    echo "$ZENITYOUT"
+			    			if [[ -z "$ZOUT" ]]; then
+			      			zenity --info --text="No user selected. Exiting."
+			      			exit 1
+			    			fi
+	ZFIELDOUT=$(zenity --forms \
+	  --title="Edit user: $ZOUT" \
+	  --text="Enter NEW values for the user:" \
+	  --add-password="ID (password)" \
+	  --add-entry="Name" \
+	  --add-entry="Profession" \
+	  --separator=","	2> /dev/null) 
+	  echo "pure newline:"
+	  echo "$ZFIELDOUT"
+	  						if [[ -z "$ZFIELDOUT" ]]; then
+	  						  zenity --info --text="Operation cancelled."
+	  						  exit 0
+	  						fi
+	  						IDUSER="${ZFIELDOUT%%,*}"
+	  						RESTUSER="${ZFIELDOUT#*,}"
+	  						HASH=$(printf '%s' "$IDUSER" | openssl dgst -sha256 | awk '{print $2}')
+	  						NWCSV="$HASH,$RESTUSER"
+	  echo "hashed newline:"
+	  echo "$NWCSV"
+	  exit 12
+	;;	
 	--reset)
 	read -p "this will delete EVERYTHING about lumen, do you wish to proceed?(y/N) > " delete
+	#case-nest#
 		case "$delete" in	
 			y|Y|yes|Yes|YES)
 			sudo -v
+			sudo chattr -R -a /srv/lumen/backups
 			 sudo rm -rf /srv/lumen && echo "directory removed"
 			 sudo userdel Lumen && echo "user and group deleted"
 			 sudo groupdel lumain 2> /dev/null
 			 sudo groupdel lumuser 2> /dev/null 
 			 sudo systemctl disable --now lumen-logs.timer 2> /dev/null
-			 echo "services disabled"
+			 sudo rm "/etc/systemd/system/lumen-logs.*"
+			 echo "services deleted"
 			 echo "cleaning finished"
 			 exit 5 
-			;;
+			;;		
 			*)
 			printf "%b\n" "${PP}exiting!${NC}" && exit 1
 			;;
 		esac
+	#case-nest-end#	
 		;;
 		*)
 		printf "%b\n" "${PP}Setup already ran! Run again with these flags to manage:${NC}"
-		printf "%b\n" "${YW}--database: to view/edit the users.csv file${NC}" # WIP
+		printf "%b\n" "${YW}--admin: to view and add users to the database${NC}" # WIP
 		printf "%b\n" "${YW}--reset: to delete and recreate everything${NC}"  #WIP
 			exit 0
 			 ;;		
