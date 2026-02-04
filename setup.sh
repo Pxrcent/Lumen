@@ -45,7 +45,7 @@ if
 fi
 ######################################################################################
 if 
-	[[ ! -f ".filecheck"]]; then
+	[[ ! -f ".filecheck" ]]; then
 	printf "%b\n" "${PP}this script must run inside the cloned repo!${NC}"
 	exit 3
 fi
