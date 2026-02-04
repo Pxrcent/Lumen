@@ -4,11 +4,11 @@ trap 'echo "❌ Error on line $LINENO: $BASH_COMMAND"' ERR
 MAINDIR=/srv/lumen
 TODAYS="users$(date +%F).csv"
 SETUPFLAG="$MAINDIR/.flag/done.txt"
-GN='\033[0;32m'
-YW='\033[0;33m'
-CN='\033[0;36m'
-PP='\033[0;35m'
-NC='\033[0m'
+GN='\033[0;32m'							# green
+YW='\033[0;33m'							# yellow
+CN='\033[0;36m'							# cyan
+PP='\033[0;35m'							# purple
+NC='\033[0m'							# color reset
 ######################################################################################
 if
 	[[ -f "$SETUPFLAG" ]]; then
@@ -93,9 +93,10 @@ printf "%b\n" "${GN}done${NC}"
  sudo chmod 774 "$MAINDIR/db"										# r-w-x \ r
  sudo chown Lumen:lumain "$MAINDIR/db/users.csv"					# adm-owned 
  sudo chmod 774 "$MAINDIR/db/users.csv"								# r-w-x \ r
+ sudo chown Lumen:lumuser "$MAINDIR/backups"
  sudo chmod -R 750 "$MAINDIR/backups"								# w-x \ app-only
  sudo chattr +a "$MAINDIR/backups"
- printf "%b\n" "${GREEN}done${NC}"
+ printf "%b\n" "${GN}done${NC}"
 sleep 1
 ######################################################################################
 read -p "do you wish to add $USER to the LUMUSER(user) group? Y/n > " PERM
@@ -122,10 +123,12 @@ sudo cp lumen-logs.timer /etc/systemd/system
 sudo systemctl daemon-reexec
 sudo systemctl daemon-reload
 sudo systemctl enable --now lumen-logs.timer
- printf "%b\n" "${GREEN}done${NC}"
+sleep 1
+ printf "%b\n" "${GN}done${NC}"
 sleep 2 
 ######################################################################################
-read -p "setup finished! A reboot is recommended. Type 'database' to manage users.  > " FLAVOUR # WIP
+ printf "%b\n" "${PP}A reboot is recommended!{NC}"
+read -p "setup finished!. Type 'database' to manage users.  > " FLAVOUR # WIP
 case $FLAVOUR in
 	database|--database|Database|DATABASE)
 	printf "%b\n" "${PP}work in progress, thank you for your time!${NC}"
