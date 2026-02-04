@@ -25,6 +25,8 @@ if
 			 sudo userdel Lumen && echo "user and group deleted"
 			 sudo groupdel lumain 2> /dev/null
 			 sudo groupdel lumuser 2> /dev/null 
+			 sudo systemctl disable --now lumen-logs.timer 2> /dev/null
+			 echo "services disabled"
 			 echo "cleaning finished"
 			 exit 5 
 			;;
@@ -40,6 +42,12 @@ if
 			exit 0
 			 ;;		
 	esac
+fi
+######################################################################################
+if 
+	[[ ! -f ".filecheck"]]; then
+	printf "%b\n" "${PP}this script must run inside the cloned repo!${NC}"
+	exit 3
 fi
 ######################################################################################
 sudo -v
@@ -74,20 +82,26 @@ sudo cp "project.json" "$MAINDIR"									# fix later
 sleep 2
 printf "%b\n" "${GN}done${NC}"
 ######################################################################################
- sudo chmod 750 "$MAINDIR/auth.sh" && echo "setting permissions..."	# r-x
+ sudo chown Lumen:lumuser "$MAINDIR"
+ sudo chown Lumen:lumuser "$MAINDIR/auth.sh"
+ sudo chmod 750 "$MAINDIR/auth.sh" && printf "%b\n" "${CN}setting permissions...${NC}" # r-x
+ sudo chown Lumen:lumain "$MAINDIR/setup.sh"
  sudo chmod 770 "$MAINDIR/setup.sh"									# r-w-x
+ sudo chown Lumen:lumain "$MAINDIR/project.json"					
  sudo chmod 770 "$MAINDIR/project.json"								# r-w-x
- sudo chmod 710 "$MAINDIR/db"											# x
- sudo chmod +w "$MAINDIR/db/users.csv"									# w
- sudo chmod 730 "$MAINDIR/backups"										# w-x
- sudo chown Lumen:lumuser "$MAINDIR/db"								# user-able
- sudo chown Lumen:lumain "$MAINDIR/db/users.csv"						# adm-owned
+ sudo chown Lumen:lumuser "$MAINDIR/db"								# user-able 
+ sudo chmod 774 "$MAINDIR/db"										# r-w-x \ r
+ sudo chown Lumen:lumain "$MAINDIR/db/users.csv"					# adm-owned 
+ sudo chmod 774 "$MAINDIR/db/users.csv"								# r-w-x \ r
+ sudo chmod -R 750 "$MAINDIR/backups"								# w-x \ app-only
+ sudo chattr +a "$MAINDIR/backups"
  printf "%b\n" "${GREEN}done${NC}"
 sleep 1
 ######################################################################################
 read -p "do you wish to add $USER to the LUMUSER(user) group? Y/n > " PERM
 case "$PERM" in
 	n|N|no|No|NO)
+	printf "%b\n" "${YW}NO USER SET!!!${NC}"
 	printf "%b\n" "${YW}skipping...${NC}" ;;
 	*)
 	sudo usermod -aG lumuser $USER && printf "%b\n" "${YW}added successfuly${NC}";;
@@ -102,12 +116,14 @@ case "$SPERM" in
 esac	
 sleep 2
 ######################################################################################
-echo " "
-sudo chown -R Lumen:lumain "$MAINDIR" && echo "finishing config..."
-sudo chown Lumen:lumuser "$MAINDIR/auth.sh"
-sudo chown Lumen:lumuser "$MAINDIR/db/users.csv" 
-sleep 2
-printf "%b\n" "${GN}done${NC}"
+printf "%b\n" "${CN} getting services started...${NC}"
+sudo cp lumen-logs.service /etc/systemd/system
+sudo cp lumen-logs.timer /etc/systemd/system
+sudo systemctl daemon-reexec
+sudo systemctl daemon-reload
+sudo systemctl enable --now lumen-logs.timer
+ printf "%b\n" "${GREEN}done${NC}"
+sleep 2 
 ######################################################################################
 read -p "setup finished! A reboot is recommended. Type 'database' to manage users.  > " FLAVOUR # WIP
 case $FLAVOUR in

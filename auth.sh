@@ -15,11 +15,20 @@ if
  zenity --error --text="Operation cancelled!" 2> /dev/null
  exit 1
 fi
-# checks if the data input matches the database, if so then confirm the registry  
-if 
-grep -Fqi "$FIELDOUT" /srv/lumen/db/users.csv; then
 
-	echo -e  "$FIELDOUT \ $(date +%T)" >> "$MORNINGFILE" && zenity --info --title="Registered!" --text="you can close this window" 2> /dev/null
+# Extract ID (everything before first comma)
+ID="${FIELDOUT%%,*}"
+# Extract rest (everything after first comma)
+REST="${FIELDOUT#*,}"
+# Hash only the ID
+HASH=$(printf '%s' "$ID" | openssl dgst -sha256 | awk '{print $2}')
+# Rebuild line in CSV format
+CHECKLINE="$HASH,$REST"
+
+# Compare whole line
+if grep -Fqi "$CHECKLINE" /srv/lumen/db/users.csv; then
+  echo "$CHECKLINE \ $(date +%T)" >> "$MORNINGFILE"
+  zenity --info --title="Registered!" --text="you can close this window" 2> /dev/null
 else
-    zenity --error --title="User data not found!" --text="Please contact your supervisor" 2> /dev/null
+  zenity --error --title="User data not found!" --text="Please contact your supervisor" 2> /dev/null
 fi

@@ -1,0 +1,11 @@
+[Unit]
+Description=Lumen daily append-only log creation
+After=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash -c '\
+  FILE="/srv/lumen/backups/users$(date +%%F).csv"; \
+  if [ ! -f "$FILE" ]; then \
+    touch "$FILE" && chown Lumen:lumuser "$FILE" && chmod 660 "$FILE" && chattr +a "$FILE"; \
+  fi'
