@@ -63,7 +63,8 @@ if
 			 sudo groupdel lumain 2> /dev/null
 			 sudo groupdel lumuser 2> /dev/null 
 			 sudo systemctl disable --now lumen-logs.timer 2> /dev/null
-			 sudo rm "/etc/systemd/system/lumen-logs.*"
+			 sudo rm /etc/systemd/system/lumen-logs.service
+			 sudo rm /etc/systemd/systemd/lumen-logs-timer
 			 echo "services deleted"
 			 echo "cleaning finished"
 			 exit 5 
