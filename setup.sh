@@ -1,4 +1,4 @@
-#/usr/bin/env bash
+#!/usr/bin/env bash
 set -e
 trap 'echo "❌ Error on line $LINENO: $BASH_COMMAND"' ERR
 MAINDIR=/srv/lumen
@@ -23,7 +23,7 @@ if
 			    --title="Lumen Admin" \
 			    --text="Select a user to edit" \
 			    --column="Name"	  2> /dev/null) 
-			    echo "$ZENITYOUT"
+			    echo "$ZOUT"
 			    			if [[ -z "$ZOUT" ]]; then
 			      			zenity --info --text="No user selected. Exiting."
 			      			exit 1
