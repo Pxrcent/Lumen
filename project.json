@@ -1,6 +1,14 @@
 #===================================================================================#
 #_______________________----------- Lumen Summary -----------_______________________#
 #===================================================================================#
+
+RAEDME {
+	"type": text file;
+	"goal": provides a quick and painless guide about the tool usage;
+	"dependencies": N/A;
+	"details": works by.... existing i guess ^_^
+},
+
 auth.sh {
 	"type": bash script;
 	"goal": provide a GUI for authentication;
@@ -10,22 +18,22 @@ auth.sh {
 
 setup.sh {
 	"type": bash script;
-	"goal": automatically install Lumen on a fresh system;
+	"goal": automatically install and manage Lumen on a fresh system;
 	"dependencies": N/A;
 	"details": works by creating the directory, files and setting access control.
 },
 
 users.csv {
 	"type": Comma-Separated Values;
-	"goal": store users value;
-	"dependencies": csview (https://github.com/wfxr/csview);
+	"goal": store users login data;
+	"dependencies": N/A;
 	"details": works by providing the database for auth.sh to lookup.
 },
 
 users(date).csv {
 	"type": Comma-Separated Values;
 	"goal": store authenticated users;
-	"dependencies": csview (https://github.com/wfxr/csview);
+	"dependencies": N/A;
 	"details": works by taking the valid output of auth.sh and storing on itself with the timestamp.
 },
 
@@ -40,14 +48,14 @@ users(date).csv {
 	"type": directory;
 	"goal": keep the database safe;
 	"dependencies" N/A;
-	"details": works by storing the users.csv and keeping it locked away from non-superusers.
+	"details": works by storing the users.csv and keeping it read-only from non-superusers.
 },
 
 /srv/lumen/backups {
 	"type": directory;
 	"goal": keep the authenticated users safe;
 	"dependencies": N/A;
-	"details": works by keeping a copy of everyday auth safe and locked away from non-superusers.	
+	"details": works by keeping a copy of everyday auth safe and locked away(append-only).	
 },
 
 Lumen {
@@ -61,7 +69,7 @@ lumain {
 	"type": group;
 	"goal": same as the user Lumen;
 	"dependencies": N/A;
-	"details": be the dedicated group of the user Lumen.
+	"details": be the dedicated group of the admin user(s).
 },
 
 lumuser {
@@ -69,4 +77,17 @@ lumuser {
 	"goal": provide access to the auth;
 	"dependencies": N/A;
 	"details": works by allowing user(s) only from this group to authenticate.
+}
+
+lumen-logs.service {
+	"type": systemd file;
+	"goal": automatically create backup files;
+	"dependencies": systemd init system;
+	"details": works by securing a users(date).csv with append-only property.
+},
+lumen-logs.timer {
+	"type": systemd file;
+	"goal": run the .service file;
+	"dependencies": systemd init system;
+	"details": works by running the .service everyday at 2AM or whenever the machine boots.
 }
