@@ -35,7 +35,7 @@ cd lumen
 ```bash
 reboot
 cd lumen
-./start.sh --flags
+./setup.sh --flags
 ```
 ------------------------------------------------------------------------------
 ### Usage:
