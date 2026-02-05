@@ -4,7 +4,6 @@ trap 'echo "❌ Error on line $LINENO: $BASH_COMMAND"' ERR
 MAINDIR=/srv/lumen
 TODAYS="users$(date +%F).csv"
 SETUPFLAG="$MAINDIR/.flag/done.txt"
-NAMES=$(cut -d',' -f2 "/srv/lumen/db/users.csv" | grep -v "Name")
 GN='\033[0;32m'							# green
 YW='\033[0;33m'							# yellow
 CN='\033[0;36m'							# cyan
@@ -18,6 +17,7 @@ if
 	printf "%b\n" "${PP}WIP${NC}" && exit 0
 	;;
 	--admin)
+		NAMES=$(cut -d',' -f2 "/srv/lumen/db/users.csv" | grep -v "Name")
 		ZOUT=$(printf "%s\n" "$NAMES" \
 			  | zenity --list \
 			    --title="Lumen Admin" \
