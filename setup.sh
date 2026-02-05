@@ -45,9 +45,11 @@ if
 	  						RESTUSER="${ZFIELDOUT#*,}"
 	  						HASH=$(printf '%s' "$IDUSER" | openssl dgst -sha256 | awk '{print $2}')
 	  						NWCSV="$HASH,$RESTUSER"
+	  						
+	  sed -i "s|^.*,$ZOUT,.*$|$NWCSV|" "$MAINDIR/db/users.csv"
 	  echo "hashed newline:"
 	  echo "$NWCSV"
-	  exit 12
+	  exit 0
 	;;	
 	--reset)
 	read -p "this will delete EVERYTHING about lumen, do you wish to proceed?(y/N) > " delete
@@ -110,6 +112,9 @@ printf "%b\n" "${GN}done${NC}"
 ######################################################################################
 echo "ID,Name,Profession" | sudo tee "$MAINDIR/db/users.csv" && printf "%b\n" "${CN}adding basic template to users.csv ${NC}"
 touch "$TODAYS" && sudo mv "$TODAYS" "$MAINDIR/backups"
+sudo chmod 660 "$MAINDIR/backups/$TODAYS"
+sudo chown Lumen:lumuser "$MAINDIR/backups/$TODAYS"
+sudo chattr +a "$MAINDIR/backups/$TODAYS"
 sleep 1
 printf "%b\n" "${GN}done${NC}"
 ######################################################################################
