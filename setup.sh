@@ -137,7 +137,7 @@ printf "%b\n" "${GN}done${NC}"
  sudo chown Lumen:lumain "$MAINDIR/db/users.csv"					# adm-owned 
  sudo chmod 774 "$MAINDIR/db/users.csv"								# r-w-x \ r
  sudo chown Lumen:lumuser "$MAINDIR/backups"
- sudo chmod -R 750 "$MAINDIR/backups"								# w-x \ app-only
+ sudo chmod 750 "$MAINDIR/backups"								# w-x \ app-only
  sudo chattr +a "$MAINDIR/backups"
  printf "%b\n" "${GN}done${NC}"
 sleep 1
