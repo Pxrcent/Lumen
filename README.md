@@ -4,21 +4,25 @@ Welcome to Lumen! A local-focused timestamp registry mainly for workplaces.
 Made using BASH, Lumen is a very easy and secure way to register
 entry and exit on the environment, with a very friendly and simple 1-click install
 script that also works as the "admin panel".
------------------------------------------------------------------------------
+
+---
+
 ### dependencies:
-1- SystemD		-> https://github.com/systemd/systemd
-2- Zenity/BubbleTea(WIP)	-> https://gitlab.gnome.org/GNOME/zenity
-3- BASH
-4- OpenSSL		-> https://github.com/openssl/openssl
-5- Compatible OS(see the tested distros bellow)
-6- git
+1. SystemD		-> https://github.com/systemd/systemd
+2. Zenity/BubbleTea(WIP)	-> https://gitlab.gnome.org/GNOME/zenity
+3. BASH
+4. OpenSSL		-> https://github.com/openssl/openssl
+5. Compatible OS(see the tested distros bellow)
+6. git
 
 ## Main features: 
-1- Easy install, usage and debug.
-2- lightweight, no dependency hell.
-3- GUI and TUI(WIP) frontend option for management.
-4- hashed credentials.
------------------------------------------------------------------------------
+1. Easy install, usage and debug.
+2. lightweight, no dependency hell.
+3. GUI and TUI(WIP) frontend option for management.
+4. hashed credentials.
+
+---
+
 ### Installation:
 
 1. **Clone the repo:**
@@ -41,7 +45,9 @@ script that also works as the "admin panel".
     cd lumen
     ./setup.sh --flags
     ```
-------------------------------------------------------------------------------
+    
+---
+
 ### Usage:
 
 Documentation about the files, groups, directories, etc. can be found in a json-like
