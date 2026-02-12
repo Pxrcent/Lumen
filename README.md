@@ -21,22 +21,26 @@ script that also works as the "admin panel".
 -----------------------------------------------------------------------------
 ### Installation:
 
-1- **clone the repo:**
-```bash
-git clone https://github.com/Pxrcent/lumen
-```
+1. **Clone the repo:**
+    
+    ```bash
+    git clone https://github.com/Pxrcent/lumen
+    ```
 
-2- **cd into the cloned repo and run the setup.sh:**
-```bash
-cd lumen
-./setup.sh
-```
-3- **done! You can now reboot and run the setup.sh again for more options:**
-```bash
-reboot
-cd lumen
-./setup.sh --flags
-```
+2. **CD into the cloned repo and run the setup.sh:**
+    
+    ```bash
+    cd lumen
+    ./setup.sh
+    ```
+
+3. **Done! You can now reboot and run the setup.sh again for more options:**
+    
+    ```bash
+    reboot
+    cd lumen
+    ./setup.sh --flags
+    ```
 ------------------------------------------------------------------------------
 ### Usage:
 
